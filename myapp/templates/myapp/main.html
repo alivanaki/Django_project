@@ -1,0 +1,25 @@
+<a href="{% url 'shorten_url:create'%}">
+  <button>
+    Create new shorten_url
+  </button>
+</a>
+<br>
+<br>
+
+<form method="Post">
+{% if list_of_short_url%}
+    {% for url in list_of_short_url %}
+        <li>{{ url.url }}
+            {%csrf_token%}
+            <input type="radio" value= "{{ url.pk }}" name="choice">
+        </li>
+    {% endfor %}
+    <br>
+      <input type="submit" value="Delete" name="action">
+      <input type="submit" value="Change" name="action">
+
+{% else %}
+    <p>There is no shorten url exist.</p>
+{% endif %}
+</form>
+
