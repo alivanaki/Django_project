@@ -6,28 +6,28 @@
 <br>
 <br>
 
-<style>
-table, th, td {
-  border:1px solid black;
-}
-</style>
-
 <form method="Post">
     {%csrf_token%}
 {% if list_of_short_url%}
-    <table>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'myapp/table.css' %}">
+    <table class="styled-table">
+        <thead>
         <tr>
             <th>Shorten url</th>
             <th>Count</th>
             <th>Change/Delete</th>
         </tr>
+        </thead>
+        <tbody>
         {% for url in list_of_short_url %}
-            <tr>
+            <tr class="active-row">
             <td> <a href="{% url 'shorten_url:detail' url.pk %}">{{ url.url }} </a></td>
             <td>{{ url.counter }}</td>
             <td><input type="radio" value= "{{ url.pk }}" name="choice"></td>
             </tr>
     {% endfor %}
+    </tbody>
     </table>
     <br>
       <input type="submit" value="Delete" name="action">
