@@ -13,6 +13,7 @@ class ShortenUrl(models.Model):
 
     url = models.CharField(max_length=200, unique=True)
     original_url = models.ForeignKey(OriginalUrl, on_delete=models.CASCADE, related_name= 'shorten_urls')
+    counter = models.IntegerField(default=0)
 
     def __str__(self):
         return self.url

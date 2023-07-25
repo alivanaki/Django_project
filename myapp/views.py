@@ -12,7 +12,6 @@ def mainview(request):
         except KeyError:
             pass
         else:
-            print(request.POST['action'])
             if request.POST['action'] == 'Delete':
                 ShortenUrl.objects.get(pk=url_id).delete()
 

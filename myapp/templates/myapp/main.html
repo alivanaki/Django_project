@@ -9,7 +9,7 @@
 <form method="Post">
 {% if list_of_short_url%}
     {% for url in list_of_short_url %}
-        <li>{{ url.url }}
+        <li>{{ url.url }} ---- {{ url.counter }}
             {%csrf_token%}
             <input type="radio" value= "{{ url.pk }}" name="choice">
         </li>
@@ -22,4 +22,3 @@
     <p>There is no shorten url exist.</p>
 {% endif %}
 </form>
-
