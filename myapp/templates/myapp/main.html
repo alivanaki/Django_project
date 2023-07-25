@@ -23,7 +23,7 @@ table, th, td {
         </tr>
         {% for url in list_of_short_url %}
             <tr>
-            <td>{{ url.url }}</td>
+            <td> <a href="{% url 'shorten_url:detail' url.pk %}">{{ url.url }} </a></td>
             <td>{{ url.counter }}</td>
             <td><input type="radio" value= "{{ url.pk }}" name="choice"></td>
             </tr>

@@ -1,10 +1,10 @@
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse_lazy
 from .models import ShortenUrl
-from .forms import CreateForm, UpdateMainForm, UpdateShortenForm
-from django.http import HttpResponseRedirect, HttpResponse
-from django.views.generic import ListView, DetailView, CreateView
+from .forms import CreateForm
+from django.http import HttpResponseRedirect
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.contrib import messages
 
 
 class MainPageView(ListView):
@@ -15,19 +15,22 @@ class MainPageView(ListView):
 
     def post(self, request, *args, **kwargs):
 
-        url_id = request.POST['choice']
-        if request.POST['action'] == 'Delete':
-            ShortenUrl.objects.get(pk=url_id).delete()
-            return HttpResponseRedirect('/app/')
+        try:
+            url_pk = request.POST['choice']
+        except KeyError:
+            return HttpResponseRedirect(reverse_lazy('shorten_url:main'))
+        else:
+            if request.POST['action'] == 'Delete':
+                return HttpResponseRedirect(reverse_lazy('shorten_url:delete', kwargs={'pk':url_pk}))
 
-        elif request.POST['action'] == 'Change':
-            return HttpResponseRedirect('/app/' + str(url_id))
+            elif request.POST['action'] == 'Change':
+                return HttpResponseRedirect(reverse_lazy('shorten_url:update', kwargs={'pk':url_pk}))
 
 
 class URLDetailView(DetailView):
 
     model = ShortenUrl
-    template_name = 'myapp/url_detail.html'
+    template_name = 'myapp/detail.html'
     context_object_name = 'url'
 
 
@@ -36,82 +39,46 @@ class CreateURLView(SuccessMessageMixin, CreateView):
     model = ShortenUrl
     form_class = CreateForm
     template_name = 'myapp/create.html'
-    success_url = reverse('shorten_url:main')
+    success_url = reverse_lazy('shorten_url:create')
     success_message = 'Successfully shorten link made.'
 
-def mainview(request):
-    if request.method == 'POST':
-        try:
-            url_id = request.POST['choice']
-        except KeyError:
-            pass
-        else:
-            if request.POST['action'] == 'Delete':
-                ShortenUrl.objects.get(pk=url_id).delete()
+    def form_valid(self, form):
+        post_shorten_url = form.instance.url
+        if post_shorten_url == 'admin' or post_shorten_url == 'app':
+            messages.error(self.request, 'You can not choose this shorten url. Please choose another one.')
+            return HttpResponseRedirect(reverse_lazy('shorten_url:create'))
 
-            elif request.POST['action'] == 'Change':
-                return HttpResponseRedirect('/app/' + str(url_id))
+        return super().form_valid(form)
 
-    shorten_urls = ShortenUrl.objects.order_by('-counter')
-    return render(request, 'myapp/main.html', {'list_of_short_url': shorten_urls})
+    def form_invalid(self, form):
+
+        messages.error(self.request, 'This shorten url is used. Please choose a new one')
+        return HttpResponseRedirect(reverse_lazy('shorten_url:create'))
 
 
-def createview(request):
+class DeleteURLView(DeleteView):
 
-    message = ''
-    if request.method == 'POST':
-        form = CreateForm(request.POST)
-        if form.is_valid():
-            post_shorten_url = form.cleaned_data['url']
-            post_main_url = form.cleaned_data['original_url']
-            if ShortenUrl.objects.filter(url=post_shorten_url).count() > 0:
-                message = 'This shorten url is used. Please choose a new one'
-            elif post_shorten_url == 'admin' or post_shorten_url == 'app':
-                message = 'You can not choose this shorten url. Please choose another one.'
-
-            else:
-                ShortenUrl.objects.create(url=post_shorten_url, original_url=post_main_url)
-                message = 'Successfully shorten link made.'
-
-        else:
-            message = 'This shorten url is used. Please choose a new one'
-    form = CreateForm()
-    return render(request, 'myapp/create.html', {'form': form, 'message': message})
+    model = ShortenUrl
+    success_url = reverse_lazy('shorten_url:main')
+    template_name = 'myapp/delete.html'
 
 
-def updateview(request, url_id):
-    return render(request, 'myapp/update.html', {'url_id' : url_id})
+class UpdateURLView(SuccessMessageMixin, UpdateView):
 
+    model = ShortenUrl
+    template_name = 'myapp/update.html'
+    success_url = reverse_lazy('shorten_url:main')
+    fields = ["url"]
 
-def updatemain(request, url_id):
-    if request.method == 'POST':
-        form = UpdateMainForm(request.POST)
-        if form.is_valid():
-            post_main_url = form.cleaned_data['url']
-            update_url = ShortenUrl.objects.get(pk=url_id)
-            update_url.original_url = post_main_url
-            update_url.save()
+    def form_valid(self, form):
+        post_shorten_url = form.instance.url
+        if post_shorten_url == 'admin' or post_shorten_url == 'app':
+            messages.error(self.request, 'You can not choose this shorten url. Please choose another one.')
+            return HttpResponseRedirect(reverse_lazy('shorten_url:update', kwargs={'pk' : self.kwargs.get('pk')}))
 
-    form = UpdateMainForm({'url' : ShortenUrl.objects.get(pk=url_id).original_url})
-    return render(request, 'myapp/update_main.html', {'form': form})
+        return super().form_valid(form)
 
+    def form_invalid(self, form):
 
-def updateshorten(request, url_id):
-    message = ''
-    if request.method == 'POST':
-        form = UpdateShortenForm(request.POST)
-
-        if form.is_valid():
-            post_shorten_url = form.cleaned_data['url']
-            if ShortenUrl.objects.filter(url=post_shorten_url).exclude(pk=url_id).count() > 0:
-                message = 'This shorten url is used. Please choose a new one'
-            elif post_shorten_url == 'admin' or post_shorten_url == 'app':
-                message = 'You can not choose this shorten url. Please choose another one.'
-            else:
-                updated_url = ShortenUrl.objects.get(pk=url_id)
-                updated_url.url = post_shorten_url
-                updated_url.save()
-                message = 'Successfully update shorten name'
-
-    form = UpdateShortenForm({'url' : ShortenUrl.objects.get(pk=url_id).url})
-    return render(request, 'myapp/update_shorten.html', {'form': form, 'message': message})
+        messages.error(self.request, 'This shorten url is used. Please choose a new one')
+        return HttpResponseRedirect(reverse_lazy('shorten_url:update', kwargs={'pk': self.kwargs.get('pk')}))
