@@ -1,9 +1,41 @@
 from django.shortcuts import render
+from django.urls import reverse
 from .models import ShortenUrl
 from .forms import CreateForm, UpdateMainForm, UpdateShortenForm
 from django.http import HttpResponseRedirect, HttpResponse
-from django.db.models import Q
+from django.views.generic import ListView, DetailView, CreateView
 
+
+class MainPageView(ListView):
+
+    queryset = ShortenUrl.objects.order_by('-counter')
+    template_name = 'myapp/main.html'
+    context_object_name = "list_of_short_url"
+
+    def post(self, request, *args, **kwargs):
+
+        url_id = request.POST['choice']
+        if request.POST['action'] == 'Delete':
+            ShortenUrl.objects.get(pk=url_id).delete()
+            return HttpResponseRedirect('/app/')
+
+        elif request.POST['action'] == 'Change':
+            return HttpResponseRedirect('/app/' + str(url_id))
+
+
+class URLDetailView(DetailView):
+
+    model = ShortenUrl
+    template_name = 'myapp/url_detail.html'
+    context_object_name = 'url'
+
+
+class CreateURLView(CreateView):
+
+    model = ShortenUrl
+    form_class = CreateForm
+    template_name = 'myapp/create.html'
+    success_url = reverse('shorten_url:create')
 
 def mainview(request):
     if request.method == 'POST':
