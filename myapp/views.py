@@ -1,3 +1,4 @@
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
 from django.urls import reverse
 from .models import ShortenUrl
@@ -30,12 +31,13 @@ class URLDetailView(DetailView):
     context_object_name = 'url'
 
 
-class CreateURLView(CreateView):
+class CreateURLView(SuccessMessageMixin, CreateView):
 
     model = ShortenUrl
     form_class = CreateForm
     template_name = 'myapp/create.html'
-    success_url = reverse('shorten_url:create')
+    success_url = reverse('shorten_url:main')
+    success_message = 'Successfully shorten link made.'
 
 def mainview(request):
     if request.method == 'POST':
