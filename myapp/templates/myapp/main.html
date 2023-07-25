@@ -6,14 +6,29 @@
 <br>
 <br>
 
+<style>
+table, th, td {
+  border:1px solid black;
+}
+</style>
+
 <form method="Post">
+    {%csrf_token%}
 {% if list_of_short_url%}
-    {% for url in list_of_short_url %}
-        <li>{{ url.url }} ---- {{ url.counter }}
-            {%csrf_token%}
-            <input type="radio" value= "{{ url.pk }}" name="choice">
-        </li>
+    <table>
+        <tr>
+            <th>Shorten url</th>
+            <th>Count</th>
+            <th>Change/Delete</th>
+        </tr>
+        {% for url in list_of_short_url %}
+            <tr>
+            <td>{{ url.url }}</td>
+            <td>{{ url.counter }}</td>
+            <td><input type="radio" value= "{{ url.pk }}" name="choice"></td>
+            </tr>
     {% endfor %}
+    </table>
     <br>
       <input type="submit" value="Delete" name="action">
       <input type="submit" value="Change" name="action">
