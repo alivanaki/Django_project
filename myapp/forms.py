@@ -1,9 +1,12 @@
 from django import forms
+from django.forms import ModelForm
+from .models import ShortenUrl
 
 
-class CreateForm(forms.Form):
-    main_url = forms.URLField(label='main url', max_length=200)
-    shorten_url = forms.CharField(label='shorten name', max_length=200)
+class CreateForm(ModelForm):
+    class Meta:
+        model = ShortenUrl
+        fields = ['original_url', 'url']
 
 
 class UpdateMainForm(forms.Form):

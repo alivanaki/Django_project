@@ -29,8 +29,8 @@ def createview(request):
         form = CreateForm(request.POST)
 
         if form.is_valid():
-            post_shorten_url = form.cleaned_data['shorten_url']
-            post_main_url = form.cleaned_data['main_url']
+            post_shorten_url = form.cleaned_data['url']
+            post_main_url = form.cleaned_data['original_url']
             if ShortenUrl.objects.filter(url=post_shorten_url).count() > 0:
                 message = 'This shorten url is used. Please choose a new one'
             elif post_shorten_url == 'admin' or post_shorten_url == 'app':
