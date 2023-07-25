@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import OriginalUrl, ShortenUrl
+from .models import ShortenUrl
 from .forms import CreateForm, UpdateMainForm, UpdateShortenForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Q
@@ -37,13 +37,8 @@ def createview(request):
                 message = 'You can not choose this shorten url. Please choose another one.'
 
             else:
-                try:
-                    original_url = OriginalUrl.objects.get(url=post_main_url)
-                except OriginalUrl.DoesNotExist:
-                    original_url = OriginalUrl.objects.create(url=post_main_url)
-                finally:
-                    ShortenUrl.objects.create(url=post_shorten_url, original_url=original_url)
-                    message = 'Successfully shorten link made.'
+                ShortenUrl.objects.create(url=post_shorten_url, original_url=post_main_url)
+                message = 'Successfully shorten link made.'
 
     form = CreateForm()
     return render(request, 'myapp/create.html', {'form': form, 'message': message})
@@ -56,19 +51,13 @@ def updateview(request, url_id):
 def updatemain(request, url_id):
     if request.method == 'POST':
         form = UpdateMainForm(request.POST)
-        print(request.POST)
         if form.is_valid():
             post_main_url = form.cleaned_data['url']
-            try:
-                original_url = OriginalUrl.objects.get(url=post_main_url)
-            except OriginalUrl.DoesNotExist:
-                original_url = OriginalUrl.objects.create(url=post_main_url)
-            finally:
-                update_url = ShortenUrl.objects.get(pk=url_id)
-                update_url.original_url = original_url
-                update_url.save()
+            update_url = ShortenUrl.objects.get(pk=url_id)
+            update_url.original_url = post_main_url
+            update_url.save()
 
-    form = UpdateMainForm({'url' : ShortenUrl.objects.get(pk=url_id).original_url.url})
+    form = UpdateMainForm({'url' : ShortenUrl.objects.get(pk=url_id).original_url})
     return render(request, 'myapp/update_main.html', {'form': form})
 
 
