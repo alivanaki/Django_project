@@ -18,7 +18,7 @@ def mainview(request):
             elif request.POST['action'] == 'Change':
                 return HttpResponseRedirect('/app/' + str(url_id))
 
-    shorten_urls = ShortenUrl.objects.all()
+    shorten_urls = ShortenUrl.objects.order_by('-counter')
     return render(request, 'myapp/main.html', {'list_of_short_url': shorten_urls})
 
 
@@ -27,7 +27,6 @@ def createview(request):
     message = ''
     if request.method == 'POST':
         form = CreateForm(request.POST)
-
         if form.is_valid():
             post_shorten_url = form.cleaned_data['url']
             post_main_url = form.cleaned_data['original_url']
@@ -40,6 +39,8 @@ def createview(request):
                 ShortenUrl.objects.create(url=post_shorten_url, original_url=post_main_url)
                 message = 'Successfully shorten link made.'
 
+        else:
+            message = 'This shorten url is used. Please choose a new one'
     form = CreateForm()
     return render(request, 'myapp/create.html', {'form': form, 'message': message})
 
