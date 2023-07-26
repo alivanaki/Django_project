@@ -7,6 +7,7 @@
     <table class="styled-table">
         <thead>
         <tr>
+            <th>logo</th>
             <th>Shorten url</th>
             <th>Create date</th>
             <th>Last edited</th>
@@ -18,6 +19,13 @@
         <tbody>
         {% for url in list_of_short_url %}
             <tr class="active-row">
+
+            {% if url.logo %}
+                <td><img src='/media/{{ url.logo }}' width="40" height="40" ></td>
+            {% else %}
+                <td></td>
+            {% endif %}
+
             <td> <a href="{% url 'shorten_url:detail' url.pk %}">{{ url.url }} </a></td>
             <td>{{ url.create_date }}</td>
             <td>{{ url.last_edit_date }}</td>
