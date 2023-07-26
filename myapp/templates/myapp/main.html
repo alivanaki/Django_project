@@ -22,8 +22,12 @@
             <td>{{ url.create_date }}</td>
             <td>{{ url.last_edit_date }}</td>
             <td>{{ url.counter }}</td>
-            <td> <a href="{% url 'shorten_url:delete' url.pk %}"><img src="{% static 'myapp/Delete.png' %}" width="40" height="40"></a></td>
-            <td> <a href="{% url 'shorten_url:update' url.pk %}"><img src="{% static 'myapp/Modify.png' %}" width="30" height="30"></a> </td>
+            <td>
+                <div style="display: flex;align-items: center">
+                    <a href="{% url 'shorten_url:delete' url.pk %}"><img src="{% static 'myapp/Delete.png' %}" width="40" height="40"></a>
+                    <a href="{% url 'shorten_url:update' url.pk %}" style="margin-left: 4px"><img src="{% static 'myapp/Modify.png' %}" width="30" height="30"></a>
+                </div>
+            </td>
             </tr>
     {% endfor %}
     </tbody>

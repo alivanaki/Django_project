@@ -15,7 +15,6 @@ class MainPageView(ListView):
     context_object_name = "list_of_short_url"
 
 
-
 class URLDetailView(DetailView):
 
     model = ShortenUrl
