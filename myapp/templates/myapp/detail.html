@@ -6,24 +6,8 @@ Counter : {{ url.counter }}
 <br>
 
 <form method="GET" id="detail-form">
-    <button type="button" id="delete-button" onclick="delete_url()">Delete</button>
-    <button type="button" id="update-button" onclick="update_url()">Update</button>
-    <button type="button" id="main-button" onclick="main_page()">Main Page</button>
+        <a href="{% url 'shorten_url:delete' object.pk %}"><button type="button">Delete</button></a>
+        <a href="{% url 'shorten_url:update' object.pk %}"><button type="button">Update</button></a>
+        <a href="{% url 'shorten_url:main' %}"><button type="button">Main Page</button></a>
 
 </form>
-
-<script>
-
-    function delete_url(){
-        document.getElementById("detail-form").action = "{% url 'shorten_url:delete' object.pk %}";
-        document.getElementById("detail-form").submit();
-    }
-    function update_url(){
-        document.getElementById("detail-form").action = "{% url 'shorten_url:update' object.pk %}";
-        document.getElementById("detail-form").submit();
-    }
-    function main_page(){
-        document.getElementById("detail-form").action = "{% url 'shorten_url:main' %}";
-        document.getElementById("detail-form").submit();
-    }
-</script>

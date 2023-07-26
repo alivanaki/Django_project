@@ -8,10 +8,3 @@ class CreateForm(ModelForm):
         model = ShortenUrl
         fields = ['original_url', 'url']
 
-
-class UpdateMainForm(forms.Form):
-    url = forms.URLField(label='main url', max_length=200)
-
-
-class UpdateShortenForm(forms.Form):
-    url = forms.CharField(label='shorten url', max_length=200)

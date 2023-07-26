@@ -15,6 +15,8 @@
         <thead>
         <tr>
             <th>Shorten url</th>
+            <th>Create date</th>
+            <th>Last edited</th>
             <th>Count</th>
             <th>Change/Delete</th>
         </tr>
@@ -23,6 +25,8 @@
         {% for url in list_of_short_url %}
             <tr class="active-row">
             <td> <a href="{% url 'shorten_url:detail' url.pk %}">{{ url.url }} </a></td>
+            <td>{{ url.create_date }}</td>
+            <td>{{ url.last_edit_date }}</td>
             <td>{{ url.counter }}</td>
             <td><input type="radio" value= "{{ url.pk }}" name="choice"></td>
             </tr>

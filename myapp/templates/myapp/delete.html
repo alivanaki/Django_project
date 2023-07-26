@@ -2,13 +2,5 @@
     {% csrf_token %}
     <p>Are you sure that you want to delete "{{object}}"?</p>
     <input type="submit" value="Confirm">
-    <button type="button" id="cancel-button" onclick="cancel()">Cancel</button>
+    <a href="{% url 'shorten_url:main' %}"><button type="button">Cancel</button></a>
 </form>
-
-<script>
-    function cancel(){
-        document.getElementById("delete-form").action = "{% url 'shorten_url:main' %}";
-        document.getElementById("delete-form").method = "GET";
-        document.getElementById("delete-form").submit();
-    }
-</script>
