@@ -53,7 +53,7 @@ class UpdateURLView(SuccessMessageMixin, UpdateView):
     model = ShortenUrl
     template_name = 'myapp/update.html'
     success_url = reverse_lazy('shorten_url:main')
-    fields = ["url"]
+    fields = ["url", "logo"]
 
     def form_invalid(self, form):
 
