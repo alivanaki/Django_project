@@ -9,8 +9,7 @@ class ShortenUrl(models.Model):
     original_url = models.URLField(max_length=200)
     counter = models.IntegerField(default=0)
     create_date = models.DateField(default=timezone.now())
-    last_edit_date = models.DateField(default=timezone.now())
-
+    last_edit_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.url
