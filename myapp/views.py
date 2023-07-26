@@ -1,9 +1,6 @@
-import datetime
 
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.utils import timezone
-
 from .models import ShortenUrl
 from .forms import CreateForm
 from django.http import HttpResponseRedirect
