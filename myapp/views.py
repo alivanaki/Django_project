@@ -1,9 +1,6 @@
-import datetime
 
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.utils import timezone
-
 from .models import ShortenUrl
 from .forms import CreateForm
 from django.http import HttpResponseRedirect
@@ -17,18 +14,6 @@ class MainPageView(ListView):
     template_name = 'myapp/main.html'
     context_object_name = "list_of_short_url"
 
-    def post(self, request, *args, **kwargs):
-
-        try:
-            url_pk = request.POST['choice']
-        except KeyError:
-            return HttpResponseRedirect(reverse_lazy('shorten_url:main'))
-        else:
-            if request.POST['action'] == 'Delete':
-                return HttpResponseRedirect(reverse_lazy('shorten_url:delete', kwargs={'pk':url_pk}))
-
-            elif request.POST['action'] == 'Change':
-                return HttpResponseRedirect(reverse_lazy('shorten_url:update', kwargs={'pk':url_pk}))
 
 
 class URLDetailView(DetailView):
