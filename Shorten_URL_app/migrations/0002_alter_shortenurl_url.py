@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('Shorten_URL', '0001_initial'),
+        ('Shorten_URL_app', '0001_initial'),
     ]
 
     operations = [

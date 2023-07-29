@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class MyappConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'Shorten_URL'
+    name = 'Shorten_URL_app'
