@@ -8,7 +8,7 @@ class ShortenUrl(models.Model):
     url = models.CharField('Shorten url', max_length=200, unique=True)
     original_url = models.URLField(max_length=200)
     counter = models.IntegerField(default=0)
-    create_date = models.DateField(default=timezone.now())
+    create_date = models.DateField(auto_now_add=True)
     last_edit_date = models.DateTimeField(auto_now=True)
     logo = models.ImageField(upload_to='myapp/', blank=True)
 
