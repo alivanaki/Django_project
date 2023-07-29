@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('url', models.URLField(unique=True)),
-                ('original_url', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='shorten_urls', to='Shorten_URL_app.originalurl')),
+                ('original_url', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='shorten_urls', to='shortener.originalurl')),
             ],
         ),
     ]

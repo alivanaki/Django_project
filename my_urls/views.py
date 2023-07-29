@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from Shorten_URL_app.models import ShortenUrl
+from shortener.models import ShortenUrl
 from django.shortcuts import redirect
 from django.views import View
 
