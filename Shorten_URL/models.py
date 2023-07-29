@@ -10,7 +10,7 @@ class ShortenUrl(models.Model):
     counter = models.IntegerField(default=0)
     create_date = models.DateField(auto_now_add=True)
     last_edit_date = models.DateTimeField(auto_now=True)
-    logo = models.ImageField(upload_to='myapp/', blank=True)
+    logo = models.ImageField(upload_to='Shorten_URL/', blank=True)
 
     def __str__(self):
         return self.url

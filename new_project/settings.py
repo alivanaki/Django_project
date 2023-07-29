@@ -29,7 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'myapp.apps.MyappConfig',
+    'Shorten_URL.apps.MyappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
